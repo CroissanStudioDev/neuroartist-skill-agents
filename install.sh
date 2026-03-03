@@ -5,6 +5,7 @@ REPO="https://github.com/CroissanStudioDev/neuroartist-skill-agents"
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+DIM='\033[2m'
 NC='\033[0m'
 
 # Install or update plugin to a directory
@@ -75,10 +76,66 @@ install_opencode() {
   install_or_update "$HOME/.opencode/skills/neuroartist" "~/.opencode/skills/neuroartist"
 }
 
+# Show detected agents and usage
+show_detected() {
+  echo "🎨 neuroartist plugin installer"
+  echo ""
+  echo "Detected agents:"
+
+  local detected=0
+  if detect_claude; then
+    echo -e "  ${GREEN}✓${NC} claude     Claude Code"
+    detected=$((detected + 1))
+  else
+    echo -e "  ${DIM}○ claude     Claude Code${NC}"
+  fi
+  if detect_opencode; then
+    echo -e "  ${GREEN}✓${NC} opencode   OpenCode"
+    detected=$((detected + 1))
+  else
+    echo -e "  ${DIM}○ opencode   OpenCode${NC}"
+  fi
+  if detect_openclaw; then
+    echo -e "  ${GREEN}✓${NC} openclaw   OpenClaw"
+    detected=$((detected + 1))
+  else
+    echo -e "  ${DIM}○ openclaw   OpenClaw${NC}"
+  fi
+  if detect_cursor; then
+    echo -e "  ${GREEN}✓${NC} cursor     Cursor"
+    detected=$((detected + 1))
+  else
+    echo -e "  ${DIM}○ cursor     Cursor${NC}"
+  fi
+  if detect_windsurf; then
+    echo -e "  ${GREEN}✓${NC} windsurf   Windsurf"
+    detected=$((detected + 1))
+  else
+    echo -e "  ${DIM}○ windsurf   Windsurf${NC}"
+  fi
+
+  echo ""
+  echo "Usage:"
+  echo "  bash -s -- <agent> [agent...]    Install for specific agent(s)"
+  echo "  bash -s -- all                   Install for all detected agents"
+  echo ""
+  echo "Examples:"
+  echo "  curl -sSL .../install.sh | bash -s -- claude"
+  echo "  curl -sSL .../install.sh | bash -s -- all"
+  echo "  curl -sSL .../install.sh | bash -s -- cursor opencode"
+
+  if [ $detected -eq 0 ]; then
+    echo ""
+    echo -e "${YELLOW}No agents detected on this system.${NC}"
+  fi
+
+  exit 0
+}
+
 show_help() {
   echo "🎨 neuroartist plugin installer"
   echo ""
-  echo "Usage: $0 [agents...]"
+  echo "Usage: $0 <agent> [agent...]"
   echo ""
   echo "Agents:"
   echo "  claude     Claude Code (~/.claude/plugins)"
@@ -86,16 +143,16 @@ show_help() {
   echo "  openclaw   OpenClaw (~/.openclaw/skills)"
   echo "  cursor     Cursor (~/.cursor/skills)"
   echo "  windsurf   Windsurf (~/.windsurf/skills)"
-  echo "  all        All detected agents (default)"
+  echo "  all        All detected agents"
   echo ""
   echo "Examples:"
-  echo "  $0                    # Auto-detect and install all"
   echo "  $0 claude             # Install for Claude Code only"
   echo "  $0 claude cursor      # Install for Claude Code and Cursor"
+  echo "  $0 all                # Install for all detected agents"
   echo ""
   echo "Via curl:"
-  echo "  curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash"
-  echo "  curl -sSL ... | bash -s -- claude cursor"
+  echo "  curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash -s -- claude"
+  echo "  curl -sSL .../install.sh | bash -s -- all"
   exit 0
 }
 
@@ -109,14 +166,18 @@ for arg in "$@"; do
   esac
 done
 
+# No arguments - show detected agents and guide
+if [ ${#AGENTS[@]} -eq 0 ]; then
+  show_detected
+fi
+
 echo "🎨 neuroartist plugin installer"
 echo ""
 
 installed=0
 
-# If no agents specified or "all" - auto-detect
-if [ ${#AGENTS[@]} -eq 0 ] || [[ " ${AGENTS[*]} " =~ " all " ]]; then
-  # Auto-detect mode
+# "all" - install for all detected agents
+if [[ " ${AGENTS[*]} " =~ " all " ]]; then
   if detect_claude; then
     install_claude
     installed=$((installed + 1))
@@ -189,9 +250,6 @@ echo ""
 
 if [ $installed -eq 0 ]; then
   echo -e "${YELLOW}No agents installed.${NC}"
-  echo ""
-  echo "Supported agents: claude, opencode, openclaw, cursor, windsurf"
-  echo "Use -h for help."
   exit 1
 fi
 
