@@ -77,4 +77,4 @@ The skill activates on:
 
 ## License
 
-MIT
+GPL v3 - форки должны оставаться открытыми.
