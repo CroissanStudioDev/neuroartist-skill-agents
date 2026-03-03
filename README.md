@@ -15,19 +15,19 @@ AI image/video/audio generation skill for coding assistants. 1195+ models, token
 ### Claude Code
 
 ```bash
-git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.claude/skills/neuroartist
+git clone https://github.com/CroissanStudioDev/neuroartist-skill-agents.git ~/.claude/skills/neuroartist
 ```
 
 ### Cursor
 
 ```bash
-git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.cursor/skills/neuroartist
+git clone https://github.com/CroissanStudioDev/neuroartist-skill-agents.git ~/.cursor/skills/neuroartist
 ```
 
 ### OpenClaw
 
 ```bash
-git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.openclaw/skills/neuroartist
+git clone https://github.com/CroissanStudioDev/neuroartist-skill-agents.git ~/.openclaw/skills/neuroartist
 ```
 
 ## Features
