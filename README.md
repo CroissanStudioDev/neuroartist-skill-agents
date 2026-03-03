@@ -9,8 +9,6 @@ AI image/video/audio generation skill for coding assistants. 1195+ models, token
 | Claude Code | ✅ Native | `~/.claude/skills/neuroartist` |
 | Cursor | ✅ Compatible | `~/.cursor/skills/neuroartist` |
 | OpenClaw | ✅ Compatible | `~/.openclaw/skills/neuroartist` |
-| Cline | 🔧 MCP Server | See below |
-| Windsurf | 🔧 MCP Server | See below |
 
 ## Installation
 
@@ -22,47 +20,14 @@ git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.c
 
 ### Cursor
 
-Cursor natively supports Claude Code skill format:
-
 ```bash
 git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.cursor/skills/neuroartist
 ```
 
 ### OpenClaw
 
-OpenClaw uses the same SKILL.md format:
-
 ```bash
 git clone https://github.com/CroissanStudioDev/claude-neuroartist-skill.git ~/.openclaw/skills/neuroartist
-```
-
-Or install from ClawHub (coming soon):
-```bash
-openclaw skill install neuroartist
-```
-
-### Cline / Windsurf (MCP Server)
-
-For Cline and Windsurf, use the MCP server adapter:
-
-1. Install the MCP server:
-```bash
-npm install -g @neuroartist/mcp-server
-```
-
-2. Add to your MCP config (`~/.cline/mcp.json` or Windsurf settings):
-```json
-{
-  "mcpServers": {
-    "neuroartist": {
-      "command": "npx",
-      "args": ["@neuroartist/mcp-server"],
-      "env": {
-        "NEUROARTIST_API_KEY": "na_live_xxx"
-      }
-    }
-  }
-}
 ```
 
 ## Features
