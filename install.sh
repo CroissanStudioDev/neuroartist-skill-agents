@@ -8,7 +8,6 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # Install or update plugin to a directory
-# Usage: install_or_update <target_dir> <display_path> [extra_message]
 install_or_update() {
   local target_dir="$1"
   local display_path="$2"
@@ -17,13 +16,12 @@ install_or_update() {
   mkdir -p "$(dirname "$target_dir")"
 
   if [ ! -d "$target_dir" ]; then
-    git clone --depth 1 "$REPO.git" "$target_dir" 2>/dev/null
+    git clone --depth 1 "$REPO.git" "$target_dir" >/dev/null 2>&1
     echo -e "  ${GREEN}Installed${NC} to $display_path"
     [ -n "$extra_msg" ] && echo -e "  ${YELLOW}$extra_msg${NC}"
   else
-    # Update existing installation
     cd "$target_dir"
-    git fetch origin main --depth 1 2>/dev/null
+    git fetch origin main --depth 1 >/dev/null 2>&1
     LOCAL=$(git rev-parse HEAD 2>/dev/null)
     REMOTE=$(git rev-parse origin/main 2>/dev/null)
 
@@ -37,72 +35,142 @@ install_or_update() {
   fi
 }
 
+# Check if agent is available
+detect_claude() { command -v claude &> /dev/null; }
+detect_openclaw() { command -v openclaw &> /dev/null || command -v claw &> /dev/null; }
+detect_cursor() {
+  [ -d "$HOME/.cursor" ] || [ -d "$HOME/Library/Application Support/Cursor" ] || [ -d "$HOME/.config/Cursor" ]
+}
+detect_windsurf() {
+  [ -d "$HOME/.windsurf" ] || [ -d "$HOME/Library/Application Support/Windsurf" ] || [ -d "$HOME/.config/Windsurf" ]
+}
+
+# Install for specific agent
+install_claude() {
+  echo -e "${GREEN}→${NC} Claude Code"
+  install_or_update "$HOME/.claude/plugins/neuroartist" "~/.claude/plugins/neuroartist" \
+    "Run: /plugin marketplace add CroissanStudioDev/neuroartist-skill-agents"
+}
+
+install_openclaw() {
+  echo -e "${GREEN}→${NC} OpenClaw"
+  install_or_update "$HOME/.openclaw/skills/neuroartist" "~/.openclaw/skills/neuroartist"
+}
+
+install_cursor() {
+  echo -e "${GREEN}→${NC} Cursor"
+  install_or_update "$HOME/.cursor/skills/neuroartist" "~/.cursor/skills/neuroartist"
+}
+
+install_windsurf() {
+  echo -e "${GREEN}→${NC} Windsurf"
+  install_or_update "$HOME/.windsurf/skills/neuroartist" "~/.windsurf/skills/neuroartist"
+}
+
+show_help() {
+  echo "🎨 neuroartist plugin installer"
+  echo ""
+  echo "Usage: $0 [agents...]"
+  echo ""
+  echo "Agents:"
+  echo "  claude     Claude Code (~/.claude/plugins)"
+  echo "  openclaw   OpenClaw (~/.openclaw/skills)"
+  echo "  cursor     Cursor (~/.cursor/skills)"
+  echo "  windsurf   Windsurf (~/.windsurf/skills)"
+  echo "  all        All detected agents (default)"
+  echo ""
+  echo "Examples:"
+  echo "  $0                    # Auto-detect and install all"
+  echo "  $0 claude             # Install for Claude Code only"
+  echo "  $0 claude cursor      # Install for Claude Code and Cursor"
+  echo ""
+  echo "Via curl:"
+  echo "  curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash"
+  echo "  curl -sSL ... | bash -s -- claude cursor"
+  exit 0
+}
+
+# Parse arguments
+AGENTS=()
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) show_help ;;
+    claude|openclaw|cursor|windsurf|all) AGENTS+=("$arg") ;;
+    *) echo "Unknown agent: $arg. Use -h for help."; exit 1 ;;
+  esac
+done
+
 echo "🎨 neuroartist plugin installer"
 echo ""
 
 installed=0
-updated=0
 
-# Claude Code (plugin system)
-if command -v claude &> /dev/null; then
-  echo -e "${GREEN}✓${NC} Claude Code detected"
-  install_or_update "$HOME/.claude/plugins/neuroartist" "~/.claude/plugins/neuroartist" \
-    "Run: /plugin marketplace add CroissanStudioDev/neuroartist-skill-agents"
-  installed=$((installed + 1))
-fi
-
-# OpenClaw
-if command -v openclaw &> /dev/null || command -v claw &> /dev/null; then
-  echo -e "${GREEN}✓${NC} OpenClaw detected"
-  install_or_update "$HOME/.openclaw/skills/neuroartist" "~/.openclaw/skills/neuroartist"
-  installed=$((installed + 1))
-fi
-
-# Cursor
-CURSOR_DIR=""
-if [ -d "$HOME/.cursor" ]; then
-  CURSOR_DIR="$HOME/.cursor"
-elif [ -d "$HOME/Library/Application Support/Cursor" ]; then
-  CURSOR_DIR="$HOME/Library/Application Support/Cursor"
-elif [ -d "$HOME/.config/Cursor" ]; then
-  CURSOR_DIR="$HOME/.config/Cursor"
-fi
-
-if [ -n "$CURSOR_DIR" ]; then
-  echo -e "${GREEN}✓${NC} Cursor detected"
-  install_or_update "$HOME/.cursor/skills/neuroartist" "~/.cursor/skills/neuroartist"
-  installed=$((installed + 1))
-fi
-
-# Windsurf
-WINDSURF_DIR=""
-if [ -d "$HOME/.windsurf" ]; then
-  WINDSURF_DIR="$HOME/.windsurf"
-elif [ -d "$HOME/Library/Application Support/Windsurf" ]; then
-  WINDSURF_DIR="$HOME/Library/Application Support/Windsurf"
-elif [ -d "$HOME/.config/Windsurf" ]; then
-  WINDSURF_DIR="$HOME/.config/Windsurf"
-fi
-
-if [ -n "$WINDSURF_DIR" ]; then
-  echo -e "${GREEN}✓${NC} Windsurf detected"
-  install_or_update "$HOME/.windsurf/skills/neuroartist" "~/.windsurf/skills/neuroartist"
-  installed=$((installed + 1))
+# If no agents specified or "all" - auto-detect
+if [ ${#AGENTS[@]} -eq 0 ] || [[ " ${AGENTS[*]} " =~ " all " ]]; then
+  # Auto-detect mode
+  if detect_claude; then
+    install_claude
+    installed=$((installed + 1))
+  fi
+  if detect_openclaw; then
+    install_openclaw
+    installed=$((installed + 1))
+  fi
+  if detect_cursor; then
+    install_cursor
+    installed=$((installed + 1))
+  fi
+  if detect_windsurf; then
+    install_windsurf
+    installed=$((installed + 1))
+  fi
+else
+  # Specific agents mode
+  for agent in "${AGENTS[@]}"; do
+    case "$agent" in
+      claude)
+        if detect_claude; then
+          install_claude
+          installed=$((installed + 1))
+        else
+          echo -e "${YELLOW}⚠${NC} Claude Code not found (claude CLI not in PATH)"
+        fi
+        ;;
+      openclaw)
+        if detect_openclaw; then
+          install_openclaw
+          installed=$((installed + 1))
+        else
+          echo -e "${YELLOW}⚠${NC} OpenClaw not found (openclaw/claw CLI not in PATH)"
+        fi
+        ;;
+      cursor)
+        if detect_cursor; then
+          install_cursor
+          installed=$((installed + 1))
+        else
+          echo -e "${YELLOW}⚠${NC} Cursor not found (~/.cursor directory not found)"
+        fi
+        ;;
+      windsurf)
+        if detect_windsurf; then
+          install_windsurf
+          installed=$((installed + 1))
+        else
+          echo -e "${YELLOW}⚠${NC} Windsurf not found (~/.windsurf directory not found)"
+        fi
+        ;;
+    esac
+  done
 fi
 
 echo ""
 
 if [ $installed -eq 0 ]; then
-  echo -e "${YELLOW}No supported AI agents found.${NC}"
+  echo -e "${YELLOW}No agents installed.${NC}"
   echo ""
-  echo "Supported agents:"
-  echo "  • Claude Code (claude CLI)"
-  echo "  • OpenClaw (openclaw/claw CLI)"
-  echo "  • Cursor (~/.cursor)"
-  echo "  • Windsurf (~/.windsurf)"
-  echo ""
-  echo "Manual installation:"
-  echo "  git clone $REPO.git <your-agent-skills-dir>/neuroartist"
+  echo "Supported agents: claude, openclaw, cursor, windsurf"
+  echo "Use -h for help."
   exit 1
 fi
 
