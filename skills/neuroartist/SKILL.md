@@ -23,7 +23,7 @@ Token-optimized AI generation API with 1195+ models. Supports images, videos, ve
 ## Quick Start
 
 ```bash
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer na_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{"m":"fal-ai/flux/schnell","i":{"prompt":"sunset over mountains"},"s":true}'
@@ -36,7 +36,7 @@ Response: `{"id":"req_abc","url":"https://cdn.neuroartist.ru/...","ms":2100}`
 ### Auth
 ```
 Header: Authorization: Bearer na_live_xxx
-Get key: https://neuroartist.ru/dashboard/tokens
+Get key: https://skill.neuroartist.ru/dashboard/tokens
 ```
 
 ### Generate (POST /api/v1/generate)

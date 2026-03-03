@@ -10,7 +10,7 @@ Generate image, then upscale 4x for print quality.
 
 ```bash
 # Step 1: Generate base image
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
     "m": "fal-ai/flux/dev",
@@ -20,7 +20,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
 # Response: {"url": "https://cdn.neuroartist.ru/abc123.jpg", ...}
 
 # Step 2: Upscale 4x
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
     "m": "fal-ai/aura-sr",
@@ -35,7 +35,7 @@ Create product photo with transparent background.
 
 ```bash
 # Step 1: Generate product image
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
     "m": "fal-ai/flux/schnell",
@@ -44,7 +44,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
   }'
 
 # Step 2: Remove background
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
     "m": "fal-ai/birefnet",
@@ -59,15 +59,15 @@ Iterate from quick draft to final quality.
 
 ```bash
 # Step 1: Quick draft with FLUX Schnell (2s, cheap)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "..."}, "s": true}'
 
 # Step 2: Refine with FLUX Dev (better quality)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/dev", "i": {"prompt": "refined prompt..."}, "s": true}'
 
 # Step 3: Final with FLUX Pro (best quality)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux-pro/v1.1", "i": {"prompt": "final prompt..."}, "s": true}'
 ```
 
@@ -79,7 +79,7 @@ Animate a static image.
 
 ```bash
 # Step 1: Generate hero image
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{
     "m": "fal-ai/flux/dev",
     "i": {"prompt": "woman looking at camera, portrait, studio lighting"},
@@ -87,7 +87,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
   }'
 
 # Step 2: Animate with Kling
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{
     "m": "fal-ai/kling-video/v2.5/turbo/image-to-video",
     "i": {
@@ -104,7 +104,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
 Create a short narrative with Kling 3.0.
 
 ```bash
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{
     "m": "fal-ai/kling-video/v3/text-to-video",
     "i": {
@@ -122,7 +122,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
 Generate vector logo for brand.
 
 ```bash
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{
     "m": "fal-ai/recraft/v4/text-to-vector",
     "i": {
@@ -140,19 +140,19 @@ Generate images for multiple platforms.
 
 ```bash
 # VK Post (1:1)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "...", "image_size": "square"}, "s": true}'
 
 # Instagram Feed (4:5)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "...", "image_size": "portrait_4_3"}, "s": true}'
 
 # YouTube Thumbnail (16:9)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "...", "image_size": "landscape_16_9"}, "s": true}'
 
 # Story/Reels (9:16)
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "...", "image_size": "portrait_16_9"}, "s": true}'
 ```
 
@@ -161,7 +161,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
 Create data visualization.
 
 ```bash
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d '{
     "m": "fal-ai/nano-banana-pro",
     "i": {
@@ -180,7 +180,7 @@ Generate several options in parallel.
 ```bash
 # Submit multiple async requests
 for i in {1..5}; do
-  curl -X POST https://neuroartist.ru/api/v1/generate \
+  curl -X POST https://skill.neuroartist.ru/api/v1/generate \
     -d "{\"m\": \"fal-ai/flux/schnell\", \"i\": {\"prompt\": \"variation $i: product photo, sneaker...\"}, \"s\": false}"
 done
 
@@ -196,15 +196,15 @@ Compare outputs from different models.
 PROMPT="professional headshot, studio lighting, neutral background"
 
 # FLUX
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d "{\"m\": \"fal-ai/flux/dev\", \"i\": {\"prompt\": \"$PROMPT\"}, \"s\": true}"
 
 # Nano Banana
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d "{\"m\": \"fal-ai/nano-banana-2\", \"i\": {\"prompt\": \"$PROMPT\"}, \"s\": true}"
 
 # Recraft
-curl -X POST https://neuroartist.ru/api/v1/generate \
+curl -X POST https://skill.neuroartist.ru/api/v1/generate \
   -d "{\"m\": \"fal-ai/recraft/v4\", \"i\": {\"prompt\": \"$PROMPT\"}, \"s\": true}"
 ```
 
@@ -213,7 +213,7 @@ curl -X POST https://neuroartist.ru/api/v1/generate \
 ### Retry on Rate Limit
 
 ```bash
-response=$(curl -s -w "\n%{http_code}" -X POST https://neuroartist.ru/api/v1/generate \
+response=$(curl -s -w "\n%{http_code}" -X POST https://skill.neuroartist.ru/api/v1/generate \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"m": "fal-ai/flux/schnell", "i": {"prompt": "..."}, "s": true}')
 
@@ -233,7 +233,7 @@ fi
 ```bash
 request_id="req_abc123"
 while true; do
-  status=$(curl -s "https://neuroartist.ru/api/v1/requests/$request_id" \
+  status=$(curl -s "https://skill.neuroartist.ru/api/v1/requests/$request_id" \
     -H "Authorization: Bearer $TOKEN" | jq -r '.status')
 
   if [ "$status" = "completed" ]; then
