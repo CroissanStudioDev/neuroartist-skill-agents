@@ -15,10 +15,18 @@ AI image/video/audio generation plugin for coding assistants. 1195+ models, toke
 ## Quick Install
 
 ```bash
+# See detected agents
 curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash
+
+# Install for all detected agents
+curl -sSL .../install.sh | bash -s -- all
+
+# Install for specific agent(s)
+curl -sSL .../install.sh | bash -s -- claude
+curl -sSL .../install.sh | bash -s -- claude cursor opencode
 ```
 
-The script auto-detects installed AI agents and installs for each.
+The script auto-detects agents and shows available options. Use `all` to install for all detected, or specify agent names.
 
 ## Installation
 
