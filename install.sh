@@ -28,7 +28,7 @@ install_or_update() {
     REMOTE=$(git rev-parse origin/main 2>/dev/null)
 
     if [ "$LOCAL" != "$REMOTE" ]; then
-      git reset --hard origin/main 2>/dev/null
+      git reset --hard origin/main >/dev/null 2>&1
       echo -e "  ${BLUE}Updated${NC} at $display_path"
     else
       echo -e "  Already up to date at $display_path"
