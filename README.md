@@ -16,14 +16,14 @@ AI image/video/audio generation plugin for coding assistants. 1195+ models, toke
 
 ```bash
 # See detected agents
-curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash
+curl -sSL skill.neuroartist.ru | bash
 
 # Install for all detected agents
-curl -sSL .../install.sh | bash -s -- all
+curl -sSL skill.neuroartist.ru | bash -s -- all
 
 # Install for specific agent(s)
-curl -sSL .../install.sh | bash -s -- claude
-curl -sSL .../install.sh | bash -s -- claude cursor opencode
+curl -sSL skill.neuroartist.ru | bash -s -- claude
+curl -sSL skill.neuroartist.ru | bash -s -- claude cursor opencode
 ```
 
 The script auto-detects agents and shows available options. Use `all` to install for all detected, or specify agent names.

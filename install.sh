@@ -120,9 +120,9 @@ show_detected() {
   echo "  bash -s -- all                   Install for all detected agents"
   echo ""
   echo "Examples:"
-  echo "  curl -sSL .../install.sh | bash -s -- claude"
-  echo "  curl -sSL .../install.sh | bash -s -- all"
-  echo "  curl -sSL .../install.sh | bash -s -- cursor opencode"
+  echo "  curl -sSL skill.neuroartist.ru | bash -s -- claude"
+  echo "  curl -sSL skill.neuroartist.ru | bash -s -- all"
+  echo "  curl -sSL skill.neuroartist.ru | bash -s -- cursor opencode"
 
   if [ $detected -eq 0 ]; then
     echo ""
@@ -151,8 +151,8 @@ show_help() {
   echo "  $0 all                # Install for all detected agents"
   echo ""
   echo "Via curl:"
-  echo "  curl -sSL https://raw.githubusercontent.com/CroissanStudioDev/neuroartist-skill-agents/main/install.sh | bash -s -- claude"
-  echo "  curl -sSL .../install.sh | bash -s -- all"
+  echo "  curl -sSL skill.neuroartist.ru | bash -s -- claude"
+  echo "  curl -sSL skill.neuroartist.ru | bash -s -- all"
   exit 0
 }
 
